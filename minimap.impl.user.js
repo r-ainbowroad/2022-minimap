@@ -281,14 +281,20 @@ const { html, render } = mlp_uhtml;
       const onclick = () => this.onclick();
       const classes = ["clickable"];
       this.enabled ? classes.push("alwaysshow") : null;
-      return html.for(ref, id)`<div data-id=${id} class=${classes.join(' ')} onclick=${onclick}>
+      return html.for(ref, id)`<div data-id=${id} class=${classes.join(" ")} onclick=${onclick}>
         ${this.name}: <span>${this.enabled ? "Enabled" : "Disabled"}</span>
       </div>`;
     }
   }
 
   class CycleSetting {
-    constructor(name, values = ["Unset"], valueIx = 0, callback = function (setting) {}, alwaysShow = false) {
+    constructor(
+      name,
+      values = ["Unset"],
+      valueIx = 0,
+      callback = function (setting) {},
+      alwaysShow = false
+    ) {
       this.name = name;
       this.values = values;
       this.valueIx = valueIx;
@@ -306,7 +312,7 @@ const { html, render } = mlp_uhtml;
       const onclick = () => this.onclick();
       const classes = ["clickable"];
       this.alwaysShow ? classes.push("alwaysshow") : null;
-      return html.for(ref, id)`<div data-id=${id} class=${classes.join(' ')} onclick=${onclick}>
+      return html.for(ref, id)`<div data-id=${id} class=${classes.join(" ")} onclick=${onclick}>
         ${this.name}: <span>${this.value}</span>
       </div>`;
     }
@@ -325,7 +331,7 @@ const { html, render } = mlp_uhtml;
       const onclick = () => this.onclick();
       const classes = ["clickable"];
       this.alwaysShow ? classes.push("alwaysshow") : null;
-      return html.for(ref, id)`<div data-id=${id} class=${classes.join(' ')} onclick=${onclick}>
+      return html.for(ref, id)`<div data-id=${id} class=${classes.join(" ")} onclick=${onclick}>
         ${this.name}
       </div>`;
     }
@@ -340,7 +346,9 @@ const { html, render } = mlp_uhtml;
     htmlFor(ref, id) {
       const classes = [];
       this.alwaysShow ? classes.push("alwaysshow") : null;
-      return html.for(ref, id)`<div data-id=${id} class=${classes.join(' ')}>${this.name}: ${this.content}</b>`;
+      return html.for(ref, id)`<div data-id=${id} class=${classes.join(" ")}>${this.name}: ${
+        this.content
+      }</b>`;
     }
   }
 
@@ -399,10 +407,16 @@ const { html, render } = mlp_uhtml;
   const settings = new Settings(settingsBlock, mlpMinimapBlock);
   settings.addSetting(
     "templateName",
-    new CycleSetting("Template", rPlaceTemplateNames, 0, function (templateNameSetting) {
-      setRPlaceTemplate(templateNameSetting.value);
-      updateTemplate();
-    }, true)
+    new CycleSetting(
+      "Template",
+      rPlaceTemplateNames,
+      0,
+      function (templateNameSetting) {
+        setRPlaceTemplate(templateNameSetting.value);
+        updateTemplate();
+      },
+      true
+    )
   );
   settings.addSetting(
     "autoColor",
@@ -418,7 +432,10 @@ const { html, render } = mlp_uhtml;
       updateTemplate();
     })
   );
-  settings.addSetting("pixelDisplayProgress", new DisplaySetting("Current progress", "Unknown", true));
+  settings.addSetting(
+    "pixelDisplayProgress",
+    new DisplaySetting("Current progress", "Unknown", true)
+  );
   settings.addSetting(
     "donate",
     new ButtonSetting("Donate me plz", function (donateSetting) {
