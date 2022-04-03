@@ -59,7 +59,7 @@ const { html, render } = mlp_uhtml;
     ? "https://media.githubusercontent.com/media/r-ainbowroad/minimap/d/main"
     : "https://raw.githubusercontent.com/r-ainbowroad/minimap/d/main";
   const getRPlaceTemplateUrl = function (templateName, type) {
-    return `${rPlaceTemplateBaseUrl}/${templateName}/${type}2k.png`
+    return `${rPlaceTemplateBaseUrl}/${templateName}/${type}2k.png`;
   };
   const rPlaceTemplateNames = [];
   const rPlaceTemplates = new Map();
@@ -469,9 +469,9 @@ const { html, render } = mlp_uhtml;
         },
         onerror: function (res) {
           reject(res);
-        }
+        },
       });
-    })
+    });
   }
 
   function getPngDataUrlForBytes(bytes) {
@@ -494,28 +494,28 @@ const { html, render } = mlp_uhtml;
         : rPlaceTemplate.canvasUrl;
     setTimeout(restoreBotWorkingRightNow, 10 * 1000);
     fetchTemplate(rPlaceTemplateUrl)
-        .then(array => {
-          imageBlock.src = getPngDataUrlForBytes(array);
-          restoreBotWorkingRightNow();
-        })
-        .catch(err => {
-          console.error("Error updating template", err);
-        });
+      .then((array) => {
+        imageBlock.src = getPngDataUrlForBytes(array);
+        restoreBotWorkingRightNow();
+      })
+      .catch((err) => {
+        console.error("Error updating template", err);
+      });
     // Also update mask if needed
     if (typeof rPlaceTemplate.maskUrl !== "undefined") {
       fetchTemplate(rPlaceTemplate.maskUrl)
-          .then(array => {
-            const img = new Image();
-            img.src = getPngDataUrlForBytes(array);
-            img.onload = () => {
-              maskCtx.clearRect(0, 0, maskCanvas.width, maskCanvas.height);
-              maskCtx.drawImage(img, 0, 0);
-              loadMask();
-            };
-          })
-          .catch(err => {
-            console.error("Error updating mask", err);
-          });
+        .then((array) => {
+          const img = new Image();
+          img.src = getPngDataUrlForBytes(array);
+          img.onload = () => {
+            maskCtx.clearRect(0, 0, maskCanvas.width, maskCanvas.height);
+            maskCtx.drawImage(img, 0, 0);
+            loadMask();
+          };
+        })
+        .catch((err) => {
+          console.error("Error updating mask", err);
+        });
     } else {
       // Free memory if we don't need it.
       rPlaceMask = undefined;
@@ -548,16 +548,14 @@ const { html, render } = mlp_uhtml;
   function pickFromBuckets(buckets, position) {
     // All of the buckets, sorted in order from highest priority to lowest priority
     const orderedBuckets = [...buckets.entries()] // Convert map to array of tuples
-      .sort()                                     // Order by key (priority) ASC
-      .reverse()                                  // Order by key (priority) DESC 
-      .map((bucket, _index) => bucket[1]);        // Drop the priority, leaving an array of buckets
+      .sort() // Order by key (priority) ASC
+      .reverse() // Order by key (priority) DESC
+      .map((bucket, _index) => bucket[1]); // Drop the priority, leaving an array of buckets
 
     // Select the position'th element from the buckets
     for (const bucket of orderedBuckets) {
-      if(bucket.length <= position)
-        position -= bucket.length;
-      else
-        return bucket[position];
+      if (bucket.length <= position) position -= bucket.length;
+      else return bucket[position];
     }
 
     // If for some reason this breaks, just return a random pixel from the largest bucket
@@ -575,21 +573,20 @@ const { html, render } = mlp_uhtml;
    *   - If the highest priority bucket contains fewer than 150 pixels, the next highest
    *     bucket is pulled from, and so on until the 150 pixel threshold is met.
    * - A pixel is picked from this virtual pool without any weighting
-   * 
+   *
    * This algorithm avoids the collision dangers of only using one bucket, while requiring
    * no delays, and ensures that the size of the selection pool is always constant.
-   * 
+   *
    * Another way of looking at this:
    * - If >=150 pixels are missing from the crystal, 100% of the bots will be working there
    * - If 100 pixels are missing from the crystal, 67% of the bots will be working there
    * - If 50 pixels are missing from the crystal, 33% of the bots will be working there
    * - If 3 pixels are missing from the crystal, 1% of the bots will be working there
-   * 
+   *
    * @param {[number, number][]} diff
    * @return {[number, number]}
    */
   function selectRandomPixelWeighted(diff) {
-
     // Build the buckets
     const buckets = new Map();
     var totalAvailablePixels = 0;
@@ -613,7 +610,7 @@ const { html, render } = mlp_uhtml;
     // Position represents the index in the virtual pool that we are selecting
     const position = Math.floor(Math.random() * Math.min(150, totalAvailablePixels));
     const pixel = pickFromBuckets(buckets, position);
-    return pixel
+    return pixel;
   }
 
   /**
@@ -630,7 +627,7 @@ const { html, render } = mlp_uhtml;
       pixel = selectRandomPixelWeighted(diff);
     }
     const [x, y] = pixel;
-    return {x, y};
+    return { x, y };
   }
 
   const resizerBlock = mlpMinimapBlock.querySelector("#resizer");
