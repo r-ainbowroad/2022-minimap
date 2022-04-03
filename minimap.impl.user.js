@@ -617,7 +617,7 @@ const { html, render } = mlp_uhtml;
    * Select a random pixel.
    *
    * @param {[number, number][]} diff
-   * @return {[number, number]}
+   * @return {{x: number, y: number}}
    */
   function selectRandomPixel(diff) {
     var pixel;
