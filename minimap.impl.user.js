@@ -578,7 +578,13 @@ const { html, render } = mlp_uhtml;
     return [diff, nCisPixels];
   }
 
-  setInterval(async () => {
+  let lastUpdate = 0;
+  const botTimeout = 1000;
+  setInterval(() => {
+    // Fix bug when tab goes to sleep
+    if(Date.now() - lastUpdate < botTimeout * 0.9) return;
+    lastUpdate = Date.now();
+
     // Update the minimap image (necessary for checking the diff)
     botCtx.clearRect(0, 0, botCanvas.width, botCanvas.height);
     botCtx.drawImage(canvas, 0, 0);
