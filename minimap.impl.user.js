@@ -58,6 +58,8 @@ const { html, render } = mlp_uhtml;
   };
   let rPlaceTemplate = rPlaceTemplateNormal(rPlaceTemplates[0]);
 
+  const rPlaceBotSettings = `https://raw.githubusercontent.com/r-ainbowroad/minimap/d/main/settings/settings.json`;
+
   class Resizer {
     constructor(elResizer, elBlock) {
       var startX, startY, startWidth, startHeight;
@@ -315,8 +317,29 @@ const { html, render } = mlp_uhtml;
       },
     });
   }
-  setInterval(updateTemplate, 1 * 60 * 1000);
+
+  let currentBotSettings = {};
+  function updateBotSettings() {
+    mlp_GM.xmlHttpRequest({
+      method: "GET",
+      responseType: "json",
+      url: `${rPlaceBotSettings}?t=${new Date().getTime()}`,
+      onload: function (res) {
+        try {
+          currentBotSettings = JSON.parse(res.response);
+        } catch (e) {
+          currentBotSettings = {};
+        } finally {
+          console.log("Settings loaded!");
+          console.log(currentBotSettings);
+        }
+      },
+    });
+  }
+
+  setInterval(() => { updateTemplate(); updateBotSettings(); }, 1 * 60 * 1000);
   updateTemplate();
+  updateBotSettings();
 
   const settingsBlock = mlpMinimapBlock.querySelector(".settings");
   const settings = new Settings(settingsBlock, mlpMinimapBlock);
@@ -429,6 +452,8 @@ const { html, render } = mlp_uhtml;
   setInterval(async () => {
     if (settings.getSetting("bot").enabled && !botWorkingRightNow) {
       botWorkingRightNow = true;
+      const timestamp = Math.floor(Date.now() / 1000);
+      if (currentBotSettings['coordinate-timings'] && timestamp % (60 * 5) > 30) return;
 
       document.querySelector("mona-lisa-embed").wakeUp();
 
