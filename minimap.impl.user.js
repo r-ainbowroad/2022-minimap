@@ -55,11 +55,11 @@ const { html, render } = mlp_uhtml;
   const rPlacePixelSize = 10;
 
   const rPlaceTemplatesGithubLfs = true;
-  const rPlaceTemplatesBaseUrl = rPlaceTemplatesGithubLfs
+  const rPlaceTemplateBaseUrl = rPlaceTemplatesGithubLfs
     ? "https://media.githubusercontent.com/media/r-ainbowroad/minimap/d/main"
     : "https://raw.githubusercontent.com/r-ainbowroad/minimap/d/main";
   const getRPlaceTemplateUrl = function (templateName, type) {
-    return `${rPlaceTemplatesBaseUrl}/${templateName}/${type}2k.png`
+    return `${rPlaceTemplateBaseUrl}/${templateName}/${type}2k.png`
   };
   const rPlaceTemplateNames = [];
   const rPlaceTemplates = new Map();
@@ -474,7 +474,7 @@ const { html, render } = mlp_uhtml;
     })
   }
 
-  function createPngDataUrlForBytes(bytes) {
+  function getPngDataUrlForBytes(bytes) {
     return "data:image/png;base64," + btoa(String.fromCharCode.apply(null, bytes));
   }
 
@@ -492,9 +492,10 @@ const { html, render } = mlp_uhtml;
       rPlaceTemplate.botUrl !== undefined && settings.getSetting("bot").enabled
         ? rPlaceTemplate.botUrl
         : rPlaceTemplate.canvasUrl;
+    setTimeout(restoreBotWorkingRightNow, 10 * 1000);
     fetchTemplate(rPlaceTemplateUrl)
         .then(array => {
-          imageBlock.src = createPngDataUrlForBytes(array);
+          imageBlock.src = getPngDataUrlForBytes(array);
           restoreBotWorkingRightNow();
         })
         .catch(err => {
@@ -505,7 +506,7 @@ const { html, render } = mlp_uhtml;
       fetchTemplate(rPlaceTemplate.maskUrl)
           .then(array => {
             const img = new Image();
-            img.src = createPngDataUrlForBytes(array);
+            img.src = getPngDataUrlForBytes(array);
             img.onload = () => {
               maskCtx.clearRect(0, 0, maskCanvas.width, maskCanvas.height);
               maskCtx.drawImage(img, 0, 0);
@@ -553,7 +554,6 @@ const { html, render } = mlp_uhtml;
 
     // Select the position'th element from the buckets
     for (const bucket of orderedBuckets) {
-      console.log("A:", bucket, position);
       if(bucket.length <= position)
         position -= bucket.length;
       else
@@ -623,7 +623,7 @@ const { html, render } = mlp_uhtml;
    * @return {[number, number]}
    */
   function selectRandomPixel(diff) {
-    if (typeof rPlaceTemplate.maskUrl === "undefined" || typeof rPlaceMask === "undefined") {
+    if (rPlaceTemplate.maskUrl === undefined || rPlaceMask === undefined) {
       return diff[Math.floor(Math.random() * diff.length)];
     } else {
       return selectRandomPixelWeighted(diff);
