@@ -55,25 +55,19 @@ const { html, render } = mlp_uhtml;
   const rPlacePixelSize = 10;
 
   const rPlaceTemplatesGithubLfs = true;
-  const getRPlaceTemplateCanvasUrl = function (templateName) {
-    if (rPlaceTemplatesGithubLfs) {
-      return `https://media.githubusercontent.com/media/r-ainbowroad/minimap/d/main/${templateName}/canvas2k.png`;
-    }
-    return `https://raw.githubusercontent.com/r-ainbowroad/minimap/d/main/${templateName}/canvas2k.png`;
-  };
-  const getRPlaceTemplateBotUrl = function (templateName) {
-    if (rPlaceTemplatesGithubLfs) {
-      return `https://media.githubusercontent.com/media/r-ainbowroad/minimap/d/main/${templateName}/bot2k.png`;
-    }
-    return `https://raw.githubusercontent.com/r-ainbowroad/minimap/d/main/${templateName}/canvas2k.png`;
+  const rPlaceTemplatesBaseUrl = rPlaceTemplatesGithubLfs
+    ? "https://media.githubusercontent.com/media/r-ainbowroad/minimap/d/main"
+    : "https://raw.githubusercontent.com/r-ainbowroad/minimap/d/main";
+  const getRPlaceTemplateUrl = function (templateName, type) {
+    return `${rPlaceTemplatesBaseUrl}/${templateName}/${type}2k.png`
   };
   const rPlaceTemplateNames = [];
   const rPlaceTemplates = new Map();
   const addRPlaceTemplate = function (templateName, options) {
     let bot = options.bot === undefined ? false : options.bot;
     rPlaceTemplates.set(templateName, {
-      canvasUrl: getRPlaceTemplateCanvasUrl(templateName),
-      botUrl: bot ? getRPlaceTemplateBotUrl(templateName) : undefined,
+      canvasUrl: getRPlaceTemplateUrl(templateName, "canvas"),
+      botUrl: bot ? getRPlaceTemplateUrl(templateName, "bot") : undefined,
     });
     rPlaceTemplateNames.push(templateName);
   };
