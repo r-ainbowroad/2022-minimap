@@ -623,11 +623,14 @@ const { html, render } = mlp_uhtml;
    * @return {[number, number]}
    */
   function selectRandomPixel(diff) {
+    var pixel;
     if (rPlaceTemplate.maskUrl === undefined || rPlaceMask === undefined) {
-      return diff[Math.floor(Math.random() * diff.length)];
+      pixel = diff[Math.floor(Math.random() * diff.length)];
     } else {
-      return selectRandomPixelWeighted(diff);
+      pixel = selectRandomPixelWeighted(diff);
     }
+    const [x, y] = pixel;
+    return {x, y};
   }
 
   const resizerBlock = mlpMinimapBlock.querySelector("#resizer");
@@ -773,12 +776,9 @@ const { html, render } = mlp_uhtml;
 
         if (!embed.nextTileAvailableIn && diff.length > 0) {
           const randPixel = selectRandomPixel(diff);
-          const imageDataRight = ctx.getImageData(randPixel[0], randPixel[1], 1, 1);
+          const imageDataRight = ctx.getImageData(randPixel.x, randPixel.y, 1, 1);
           autoColorPick(imageDataRight);
-          embed.camera.applyPosition({
-            x: randPixel[0],
-            y: randPixel[1],
-          });
+          embed.camera.applyPosition(randPixel);
           embed.showColorPicker = true;
           embed.onConfirmPixel();
           console.log(
