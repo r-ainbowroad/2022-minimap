@@ -537,7 +537,7 @@ const { html, render } = mlp_uhtml;
    * Pick a bucket, in a weighted way.
    *
    * @param {Map<number, any>} buckets
-   * @return {any}
+   * @return {[number, any]}
    */
   function pickBucket(buckets) {
     const bucketSum = Array.from(buckets.keys()).reduce((sum, key) => sum + key, 0);
@@ -545,12 +545,13 @@ const { html, render } = mlp_uhtml;
     let offset = 0;
     for (const [value, coords] of buckets) {
       if (random <= (offset + value) / bucketSum) {
-        return coords;
+        return [value, coords];
       }
       offset += value;
     }
     // If for some reason this breaks, just return a random pixel from the largest bucket
-    return buckets.get(Array.from(buckets.keys()).reduce((a, b) => Math.max(a, b), 0));
+    const value = Array.from(buckets.keys()).reduce((a, b) => Math.max(a, b), 0);
+    return [value, buckets.get(value)];
   }
 
   /**
@@ -575,7 +576,8 @@ const { html, render } = mlp_uhtml;
       }
     }
     console.log("Picking from buckets", buckets);
-    const bucket = pickBucket(buckets);
+    const [value, bucket] = pickBucket(buckets);
+    console.log("Picked the", value, "bucket")
     return bucket[Math.floor(Math.random() * bucket.length)];
   }
 
