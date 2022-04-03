@@ -528,7 +528,7 @@ const { html, render } = mlp_uhtml;
 
     rPlaceMask = new Array(maskCanvas.width * maskCanvas.height);
     for (let i = 0; i < rPlaceMask.length; i++) {
-      // Grayscale, pick red channel!
+      // Grayscale, pick green channel!
       rPlaceMask[i] = maskData[i * 4 + 1];
     }
   }
