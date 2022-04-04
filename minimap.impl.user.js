@@ -551,7 +551,7 @@ const { html, render } = mlp_uhtml;
     }
   }
 
-  const NEXT_ART_MIN_DIST = 100; // art within this range is considered the same
+  const NEXT_ART_MIN_DIST = 50; // art within this range is considered the same
   let currentLocationIndex = null;
   function findNextArt() {
     const templateData = ctx.getImageData(0, 0, rPlaceCanvas.width, rPlaceCanvas.height).data;
