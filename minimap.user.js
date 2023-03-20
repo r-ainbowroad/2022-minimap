@@ -16,7 +16,7 @@
 // SPDX-FileCopyrightText: 2022 Ponywka
 // SPDX-License-Identifier: Apache-2.0 OR ISC
 
-const _TamperRoot = this;
+const _TamperRoot = {'GM': GM, 'uhtml': uhtml};
 (async function () {
   // Updater
   GM.xmlHttpRequest({
